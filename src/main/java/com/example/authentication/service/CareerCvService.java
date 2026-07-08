@@ -38,8 +38,8 @@ public class CareerCvService {
         existingCv.setDate(updatedDetails.getDate());
         existingCv.setCv(updatedDetails.getCv());
         existingCv.setStatus(updatedDetails.getStatus());
-
         return repository.save(existingCv);
+
     }
 
     public void deleteCv(Integer id) {

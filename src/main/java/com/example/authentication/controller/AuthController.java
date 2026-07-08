@@ -5,12 +5,13 @@ import com.example.authentication.dto.LoginRequest;
 import com.example.authentication.dto.RegisterRequest;
 import com.example.authentication.service.AuthService;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*") // Allows connections from frontends
 public class AuthController {
 
     private final AuthService service;
@@ -29,4 +30,11 @@ public class AuthController {
         return ResponseEntity.ok(service.login(request));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Logged out successfully from application view layer."
+        ));
+    }
 }

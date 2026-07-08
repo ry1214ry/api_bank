@@ -8,7 +8,9 @@ import com.example.authentication.model.Role;
 import com.example.authentication.model.User;
 import com.example.authentication.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +30,16 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        // Default to USER if no role is supplied, otherwise convert string to Role enum
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email address is already in use.");
+        }
+
         Role userRole = Role.USER;
-        if (request.getRole() != null) {
+        if (request.getRole() != null && !request.getRole().isBlank()) {
             try {
-                userRole = Role.valueOf(request.getRole().toUpperCase());
+                userRole = Role.valueOf(request.getRole().trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                // Falls back to USER if role string doesn't match enum names
+                userRole = Role.USER;
             }
         }
 
@@ -45,8 +50,10 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword()),
                 userRole
         );
+
         User savedUser = repository.save(user);
         String jwtToken = jwtService.generateToken(savedUser);
+
         return new AuthResponse(
                 jwtToken,
                 savedUser.getId(),
@@ -58,11 +65,20 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("Invalid email or password combination.");
+        }
 
-        User user = repository.findByEmail(request.getEmail()).orElseThrow();
+        User user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+
         String jwtToken = jwtService.generateToken(user);
 
         return new AuthResponse(

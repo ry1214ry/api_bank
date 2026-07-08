@@ -4,7 +4,6 @@ import com.example.authentication.model.CareerCv;
 import com.example.authentication.service.CareerCvService;
 import org.springframework.http.ResponseEntity;
 
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
