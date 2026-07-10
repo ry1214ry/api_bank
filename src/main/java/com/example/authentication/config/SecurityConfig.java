@@ -27,8 +27,22 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
 
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/career/**",
+                                "/api/v1/menus/**",
+                                "/api/v1/creditcards/**",
+                                "/api/v1/chooseposts/**",
+                                "/api/v1/intranet-folders/**",
+                                "/api/v1/newsletter/**",
+                                "/images/popup/**",
+                                "/images/products/**",
+                                "/images/promotions/**",
+                                "/api/v1/contact-us/**",
+                                "/images/contacts/**"
+
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -36,7 +50,6 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }

@@ -1,7 +1,5 @@
 package com.example.authentication.model;
-
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "tbl_creditcard")
 public class CreditCard {
@@ -52,4 +50,6 @@ public class CreditCard {
 
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
+
+
 }

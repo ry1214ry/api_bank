@@ -42,4 +42,6 @@ public class NewsletterController {
         service.deleteNewsletter(id);
         return ResponseEntity.ok("Newsletter Record deleted successfully with ID: " + id);
     }
+
+
 }
