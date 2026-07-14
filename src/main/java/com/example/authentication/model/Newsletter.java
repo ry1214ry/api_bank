@@ -19,17 +19,14 @@ public class Newsletter {
     @Column(name = "register_date", length = 200, nullable = false)
     private String registerDate;
 
-    // Default constructor matching the pattern
     public Newsletter() {}
 
-    // Parameterized constructor excluding ID
     public Newsletter(String email, Integer phone, String registerDate) {
         this.email = email;
         this.phone = phone;
         this.registerDate = registerDate;
     }
 
-    // Getters and Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

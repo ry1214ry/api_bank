@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/images/products/**",
                                 "/images/promotions/**",
                                 "/api/v1/contact-us/**",
-                                "/images/contacts/**"
+                                "/images/contacts/**",
+                                "/images/news/**"
 
                         ).permitAll()
                         .anyRequest().authenticated()

@@ -13,30 +13,29 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
+        // Popup Directory
         Path popupDir = Paths.get("./popup");
-        String popupPath = popupDir.toFile().getAbsolutePath();
         registry.addResourceHandler("/images/popup/**")
-                .addResourceLocations("file:/" + popupPath + "/");
+                .addResourceLocations(popupDir.toAbsolutePath().toUri().toString());
 
+        // Products Directory
         Path productsDir = Paths.get("./images/products");
-        String productsPath = productsDir.toFile().getAbsolutePath();
         registry.addResourceHandler("/images/products/**")
-                .addResourceLocations("file:/" + productsPath + "/");
+                .addResourceLocations(productsDir.toAbsolutePath().toUri().toString());
 
+        // Promotions Directory
         Path promoDir = Paths.get("./images/promotions");
-        String promoPath = promoDir.toFile().getAbsolutePath();
         registry.addResourceHandler("/images/promotions/**")
-                .addResourceLocations("file:/" + promoPath + "/");
+                .addResourceLocations(promoDir.toAbsolutePath().toUri().toString());
 
-
+        // Contacts Directory
         Path contactDir = Paths.get("./images/contacts");
-        String contactPath = contactDir.toFile().getAbsolutePath();
         registry.addResourceHandler("/images/contacts/**")
-                .addResourceLocations("file:/" + contactPath + "/");
+                .addResourceLocations(contactDir.toAbsolutePath().toUri().toString());
 
-
-
-
-
+        // News Directory (Fixed duplicate variables here)
+        Path newsDir = Paths.get("./images/news");
+        registry.addResourceHandler("/images/news/**")
+                .addResourceLocations(newsDir.toAbsolutePath().toUri().toString());
     }
 }

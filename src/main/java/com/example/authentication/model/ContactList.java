@@ -1,7 +1,5 @@
 package com.example.authentication.model;
-
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "tbl_contact_list")
 public class ContactList {
@@ -17,22 +15,18 @@ public class ContactList {
 
     @Lob
     @Column(name = "file_upload", nullable = false, columnDefinition = "TEXT")
-    private String fileUpload; // Changed concept: Stores text block instead of file path
+    private String fileUpload;
 
     @Column(name = "status", length = 30, nullable = false)
     private String status;
 
-    // Default Constructor
     public ContactList() {}
-
-    // Parameterized Constructor
     public ContactList(String fileName, String fileUpload, String status) {
         this.fileName = fileName;
         this.fileUpload = fileUpload;
         this.status = status;
     }
 
-    // Getters and Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
