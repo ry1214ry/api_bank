@@ -3,7 +3,7 @@ package com.example.authentication.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tbl_test_career_cv")
+@Table(name = "tbl_career_cv")
 public class CareerCv {
 
     @Id

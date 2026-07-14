@@ -23,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final TokenBlacklistService blacklistService; // 1. Added Blacklist Service reference
 
-    // 2. Updated constructor dependency injection
+
     public JwtAuthenticationFilter(JwtService jwtService,
                                    UserDetailsService userDetailsService,
                                    TokenBlacklistService blacklistService) {
@@ -49,8 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        // 3. BLACKLIST SECURITY CHECK
-        // If this exact token matches one in our logout map, terminate early with 401 Unauthorized
+
         if (blacklistService.isBlacklisted(jwt)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
