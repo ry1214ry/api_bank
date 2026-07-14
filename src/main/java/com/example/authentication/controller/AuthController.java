@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*") // Allows connections from frontends
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthService service;
@@ -31,10 +31,17 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "message", "Logged out successfully from application view layer."
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            service.logout(authHeader);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Token invalidated. Logged out successfully."
+            ));
+        }
+        return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "message", "No authorization token found in headers."
         ));
     }
 }

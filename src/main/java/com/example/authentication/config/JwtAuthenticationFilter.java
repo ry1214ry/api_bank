@@ -1,5 +1,6 @@
 package com.example.authentication.config;
 
+import com.example.authentication.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +21,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenBlacklistService blacklistService; // 1. Added Blacklist Service reference
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    // 2. Updated constructor dependency injection
+    public JwtAuthenticationFilter(JwtService jwtService,
+                                   UserDetailsService userDetailsService,
+                                   TokenBlacklistService blacklistService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.blacklistService = blacklistService;
     }
 
     @Override
@@ -42,6 +48,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
+
+        // 3. BLACKLIST SECURITY CHECK
+        // If this exact token matches one in our logout map, terminate early with 401 Unauthorized
+        if (blacklistService.isBlacklisted(jwt)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Token has been invalidated due to logout.\"}");
+            return;
+        }
+
         userEmail = jwtService.extractUsername(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
