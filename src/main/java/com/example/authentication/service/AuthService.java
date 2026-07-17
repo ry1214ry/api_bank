@@ -23,14 +23,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final TokenBlacklistService blacklistService; // Added injection
+    private final TokenBlacklistService blacklistService;
+
 
     public AuthService(UserRepository repository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
                        AuthenticationManager authenticationManager,
-                       TokenBlacklistService blacklistService) { // Updated constructor
+                       TokenBlacklistService blacklistService) {
         this.repository = repository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;

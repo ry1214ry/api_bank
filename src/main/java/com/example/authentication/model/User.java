@@ -38,7 +38,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -62,7 +61,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() { return true; }
-
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

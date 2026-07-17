@@ -13,7 +13,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>authentication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging> <!-- Changed from jar to war -->
+	<packaging>war</packaging>
 
 	<name>authentication</name>
 	<description>Full Authentication API using Spring Boot and JWT</description>

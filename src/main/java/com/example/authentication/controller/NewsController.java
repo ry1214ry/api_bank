@@ -154,7 +154,6 @@ public class NewsController {
             return ResponseEntity.internalServerError().body("Error updating news images: " + e.getMessage());
         }
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNews(@PathVariable Integer id) {
         service.deleteNews(id);

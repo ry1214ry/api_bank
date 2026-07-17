@@ -43,5 +43,4 @@ public class ChoosepostController {
         return ResponseEntity.ok("Post Record deleted successfully with ID: " + id);
     }
 
-
 }
