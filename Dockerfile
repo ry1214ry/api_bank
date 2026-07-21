@@ -1,13 +1,24 @@
+# --- Stage 1: Build the application ---
+FROM maven:3.9.6-eclipse-temurin-21-jammy AS build
+WORKDIR /app
 
-FROM tomcat:10.1-jdk21-temurin-alpine
+# Cache Maven dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Copy source code and build WAR package
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-RUN sed -i 's/port="8080"/port="9292"/g' /usr/local/tomcat/conf/server.xml
+# --- Stage 2: Create the runtime image ---
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
 
-COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Copy the built WAR file
+COPY --from=build /app/target/*.war /app/app.war
 
-EXPOSE 9292
+# Expose container port
+EXPOSE 2426
 
-CMD ["catalina.sh", "run"]
-
+# Force Spring Boot to listen on 0.0.0.0 and port 2426
+ENTRYPOINT ["java", "-Dserver.address=0.0.0.0", "-Dserver.port=2426", "-jar", "app.war"]

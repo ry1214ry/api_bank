@@ -48,7 +48,7 @@ public class CareerService {
         existingCareer.setShortId(updatedDetails.getShortId());
         existingCareer.setReorder(updatedDetails.getReorder());
 
-        // Only update image path if a new image was uploaded
+
         if (updatedDetails.getImage() != null) {
             existingCareer.setImage(updatedDetails.getImage());
         }

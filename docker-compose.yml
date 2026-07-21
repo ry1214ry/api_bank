@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:latest
+    container_name: mysql-container
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: cab_database_springboot
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Auto-import your phpMyAdmin database dump on fresh initialization:
+      - ./cab_database_springboot.sql:/docker-entrypoint-initdb.d/cab_database_springboot.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  auth-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-app
+    ports:
+      - "2426:2426"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/cab_database_springboot?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SERVER_PORT: 2426
+      SERVER_ADDRESS: 0.0.0.0
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
